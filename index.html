@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
+  <title>Menjaga Hati di Balik Kelebihan Orang Lain</title>
+  <style>
+    :root {
+      --bg: #f5f7f4;
+      --surface: #ffffff;
+      --surface-soft: #eef6f3;
+      --text: #1f2937;
+      --muted: #667085;
+      --primary: #0f766e;
+      --primary-dark: #0b5d57;
+      --accent: #d6efe9;
+      --line: #dce7e3;
+      --warning: #a16207;
+      --warning-bg: #fff8df;
+      --danger: #b42318;
+      --danger-bg: #fff1f0;
+      --success: #157347;
+      --success-bg: #edf9f1;
+      --shadow: 0 16px 40px rgba(15, 118, 110, .10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fbf9 0%, var(--bg) 100%);
+      line-height: 1.6;
+    }
+
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(220,231,227,.95);
+    }
+
+    .topbar-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px 16px 10px;
+    }
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+
+    .journey-title {
+      font-weight: 800;
+      font-size: .95rem;
+      letter-spacing: .01em;
+    }
+
+    .stage-label {
+      font-size: .8rem;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .progress-wrap {
+      position: relative;
+      height: 9px;
+      background: #e8efec;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), #36a28e);
+      transition: width .3s ease;
+    }
+
+    main {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 110px;
+      flex: 1;
+    }
+
+    .page {
+      display: none;
+      animation: pageIn .35s ease;
+    }
+
+    .page.active { display: block; }
+
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 90% 8%, rgba(64,173,148,.16), transparent 24%),
+        linear-gradient(135deg, #eff9f6, #ffffff 58%);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 28px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-badge, .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--primary-dark);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    h1, h2, h3 { line-height: 1.18; margin-top: 0; }
+    h1 { font-size: clamp(2rem, 8vw, 4.4rem); margin-bottom: 12px; }
+    h2 { font-size: clamp(1.5rem, 4.6vw, 2.25rem); margin-bottom: 8px; }
+    h3 { font-size: 1.1rem; }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 1.03rem;
+      max-width: 720px;
+      margin-bottom: 22px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      margin: 20px 0 24px;
+    }
+
+    .meta-item {
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .meta-item small { display:block; color:var(--muted); font-size:.74rem; }
+    .meta-item strong { display:block; margin-top:2px; font-size:.95rem; }
+
+    .prompt-grid {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 24px;
+    }
+
+    .prompt {
+      padding: 14px 16px;
+      background: #fff;
+      border-left: 4px solid var(--primary);
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .page-head {
+      margin-bottom: 14px;
+    }
+
+    .page-head .sub {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .case-card {
+      background: #fbfcfc;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+
+    .case-card p { margin: 0 0 10px; }
+    .case-quote {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #eef8f6;
+      border: 1px solid #cfe9e3;
+      font-weight: 800;
+    }
+
+    .callout {
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin: 15px 0;
+      border: 1px solid;
+    }
+    .callout h3 { margin-bottom: 5px; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout.think { background: #f5f7ff; border-color: #dfe4ff; }
+    .callout.write { background: #fffaf0; border-color: #f0dfb7; }
+    .callout.reflect { background: #fff4f4; border-color: #f0cdca; }
+    .callout.remember { background: #f7f9f8; border-color: var(--line); }
+
+    ol.questions {
+      padding-left: 22px;
+      margin: 9px 0 0;
+    }
+    ol.questions li { margin-bottom: 10px; }
+
+    .mini-question {
+      font-weight: 800;
+      padding: 14px 16px;
+      background: #fafcfb;
+      border: 1px dashed #bdd3cc;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    table {
+      width: 100%;
+      min-width: 540px;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 13px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--surface-soft); font-size: .88rem; }
+    td { height: 58px; }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .social-item {
+      min-height: 78px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 700;
+    }
+    .social-item span { font-size: 1.4rem; }
+
+    .calm {
+      background: linear-gradient(180deg, #fbfdfc, #f1f8f5);
+    }
+
+    .big-reflection {
+      font-size: clamp(1.45rem, 6vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      padding: 18px 0 8px;
+    }
+
+    .blank-line {
+      display: inline-block;
+      min-width: 150px;
+      border-bottom: 2px solid currentColor;
+      transform: translateY(-3px);
+    }
+
+    .conclusion-card {
+      text-align: center;
+      padding: 24px 18px;
+    }
+
+    .motivational {
+      border-radius: 18px;
+      background: #113c39;
+      color: #fff;
+      padding: 20px 18px;
+      margin-top: 18px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      transition: .2s ease;
+    }
+
+    .check-item.done {
+      background: var(--success-bg);
+      border-color: #b9e4c8;
+    }
+
+    .check-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+      accent-color: var(--primary);
+    }
+    .check-item label { cursor:pointer; flex:1; }
+    .check-item strong { display:block; }
+
+    .finish-progress {
+      height: 12px;
+      border-radius: 999px;
+      background: #e7eeeb;
+      overflow: hidden;
+      margin: 10px 0 18px;
+    }
+    .finish-progress > div {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), #42ad96);
+      transition: width .25s ease;
+    }
+
+    .upload-box {
+      background: linear-gradient(135deg, #eff9f6, #fff);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px 18px;
+    }
+
+    .filename {
+      display: inline-block;
+      background: #fff;
+      border: 1px dashed #aacac1;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-weight: 800;
+      margin: 6px 0 10px;
+    }
+
+    .timer-card {
+      position: sticky;
+      bottom: 12px;
+      z-index: 10;
+      margin: 12px 0;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(16,24,40,.12);
+      padding: 13px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .timer-left { display:flex; align-items:center; gap:10px; min-width:0; }
+    .timer-icon { font-size:1.35rem; }
+    .timer-value { font-variant-numeric: tabular-nums; font-weight: 900; font-size: 1.55rem; }
+    .timer-status { color:var(--muted); font-size:.78rem; font-weight:700; }
+    .timer-card.warning { border-color:#e0b33a; }
+    .timer-card.danger { border-color:#df8a84; }
+
+    .nav {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .nav-left, .nav-right { display:flex; gap:8px; }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      min-height: 46px;
+      font-weight: 850;
+      display: inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition: transform .16s ease, opacity .16s ease, background .16s ease;
+      text-decoration:none;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #a9e0d5; outline-offset: 2px; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .btn-primary { background: var(--primary); color:#fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn-secondary { background:#ecf1ef; color:#27433d; }
+    .btn-ghost { background:transparent; color:#35534d; border:1px solid var(--line); }
+    .btn-lg { padding: 14px 20px; min-height:52px; }
+    .btn-full { width:100%; }
+
+    .route {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .route-step {
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      background:#fff;
+    }
+    .route-step small { color:var(--muted); display:block; }
+    .route-step strong { display:block; margin-top:2px; }
+
+    .notice {
+      padding:14px 16px;
+      border-radius:15px;
+      border:1px solid #efd99f;
+      background:var(--warning-bg);
+      margin-top: 16px;
+      font-weight: 700;
+    }
+
+    .success-message {
+      display:none;
+      background:var(--success-bg);
+      border:1px solid #b9e4c8;
+      border-radius:15px;
+      padding:13px 15px;
+      margin: 12px 0 0;
+      font-weight:800;
+    }
+    .success-message.show { display:block; }
+
+    footer {
+      padding: 20px 16px 28px;
+      text-align:center;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    @media (min-width: 720px) {
+      main { padding-top: 34px; }
+      .hero { padding: 38px; }
+      .section-card { padding: 28px; }
+      .meta-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .social-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .route { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .checklist { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 450px) {
+      .topbar-inner { padding-left:12px; padding-right:12px; }
+      main { padding-left:12px; padding-right:12px; }
+      .hero, .section-card { border-radius: 20px; }
+      .meta-grid { grid-template-columns: 1fr 1fr; }
+      .nav { flex-direction:column; align-items:stretch; }
+      .nav-left, .nav-right { width:100%; }
+      .nav .btn { flex:1; }
+      .timer-card { position: sticky; bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar" aria-label="Progress perjalanan belajar">
+      <div class="topbar-inner">
+        <div class="topbar-row">
+          <div class="journey-title">🌱 Learning Journey</div>
+          <div class="stage-label" id="stageLabel">Pembuka</div>
+        </div>
+        <div class="progress-wrap" aria-label="Progress pembelajaran">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <!-- PAGE 1 -->
+      <section class="page active" data-page="0" data-label="Pembuka">
+        <div class="hero">
+          <div class="hero-badge">🌱 PAI & Budi Pekerti · Kelas X</div>
+          <h1>MENJAGA HATI<br><span style="color:var(--primary);">di Balik Kelebihan Orang Lain</span></h1>
+          <p class="hero-subtitle">Ketika melihat orang lain berhasil, bagaimana seharusnya kita bersikap?</p>
+
+          <div class="meta-grid">
+            <div class="meta-item"><small>Alokasi waktu</small><strong>90 menit / 2 JP</strong></div>
+            <div class="meta-item"><small>Bentuk tugas</small><strong>Individu</strong></div>
+            <div class="meta-item"><small>Media pengerjaan</small><strong>Buku tulis</strong></div>
+            <div class="meta-item"><small>Media pengumpulan</small><strong>Google Form</strong></div>
+          </div>
+
+          <div class="prompt-grid">
+            <div class="prompt">“Pernah merasa iri ketika melihat teman berhasil?”</div>
+            <div class="prompt">“Pernah merasa lebih hebat ketika mendapatkan prestasi?”</div>
+          </div>
+
+          <div class="section-card" style="margin:0; box-shadow:none;">
+            <strong>Hari ini kita akan belajar</strong>
+            <p style="margin:6px 0 0; color:var(--muted);">mengenali hasad, ujub, dan takabur melalui situasi yang dekat dengan kehidupan kita.</p>
+          </div>
+
+          <div style="margin-top:20px;">
+            <button class="btn btn-primary btn-lg btn-full" data-go="1">▶ MULAI AKTIVITAS</button>
+          </div>
+        </div>
+
+        <div class="route" aria-label="Peta perjalanan belajar">
+          <div class="route-step"><small>01</small><strong>🔥 Kenali Hasad</strong></div>
+          <div class="route-step"><small>02</small><strong>🏆 Kenali Ujub & Takabur</strong></div>
+          <div class="route-step"><small>03</small><strong>🧠 Bedakan</strong></div>
+          <div class="route-step"><small>04</small><strong>📱 Hubungkan</strong></div>
+          <div class="route-step"><small>05</small><strong>❤️ Cermin Diri</strong></div>
+          <div class="route-step"><small>06</small><strong>📝 Simpulkan</strong></div>
+          <div class="route-step"><small>07</small><strong>📤 Kumpulkan</strong></div>
+        </div>
+      </section>
+
+      <!-- PAGE 2 -->
+      <section class="page" data-page="1" data-label="Petunjuk">
+        <div class="section-card">
+          <div class="eyebrow">📖 Sebelum mulai</div>
+          <h2 style="margin-top:12px;">Siapkan dirimu untuk perjalanan belajar.</h2>
+          <p class="sub" style="color:var(--muted);">Ikuti langkahnya berurutan. Website ini hanya menjadi pemandu aktivitas.</p>
+
+          <div class="route" style="margin-top:20px;">
+            <div class="route-step"><small>01 — BACA</small><strong>Baca setiap aktivitas dengan teliti.</strong></div>
+            <div class="route-step"><small>02 — PIKIRKAN</small><strong>Jangan terburu-buru mencari jawaban.</strong></div>
+            <div class="route-step"><small>03 — TULIS</small><strong>Semua jawaban ditulis tangan di BUKU TULIS.</strong></div>
+            <div class="route-step"><small>04 — CEK</small><strong>Pastikan semua aktivitas sudah dikerjakan.</strong></div>
+            <div class="route-step"><small>05 — SCAN</small><strong>Foto atau scan semua halaman jawaban.</strong></div>
+            <div class="route-step"><small>06 — GABUNGKAN</small><strong>Gabungkan semua halaman menjadi SATU FILE PDF.</strong></div>
+            <div class="route-step"><small>07 — UPLOAD</small><strong>Upload file PDF melalui Google Form yang disediakan guru.</strong></div>
+          </div>
+
+          <div class="notice">⚠️ <strong>PENTING</strong><br>Website ini bukan tempat menulis jawaban.<br>Semua jawaban WAJIB ditulis di buku tulis.</div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next>SAYA SIAP →</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 3 -->
+      <section class="page" data-page="2" data-label="Aktivitas 1">
+        <div class="section-card">
+          <div class="page-head">
+            <div class="eyebrow">🔥 Aktivitas 1</div>
+            <h2 style="margin-top:12px;">Ketika Keberhasilan Orang Lain Membuat Kita Tidak Nyaman</h2>
+            <p class="sub">⏱️ Waktu: 10 menit</p>
+          </div>
+
+          <div class="case-card">
+            <p>Raka membuka WhatsApp Status.</p>
+            <p>Ia melihat temannya mendapatkan juara pertama dalam sebuah lomba. Banyak orang memberikan ucapan selamat.</p>
+            <div class="case-quote">“Kenapa dia lagi yang menang?<br>Semoga lain kali dia gagal.”</div>
+            <p style="margin-top:12px;">Raka kemudian menyadari bahwa ia merasa tidak senang melihat keberhasilan temannya.</p>
+          </div>
+
+          <div class="callout think">
+            <h3>🧠 PIKIRKAN</h3>
+            <p>Perhatikan bukan hanya tindakan Raka, tetapi juga apa yang terjadi di dalam pikirannya.</p>
+          </div>
+
+          <div class="callout write">
+            <h3>✍️ TULIS DI BUKU TULIS</h3>
+            <ol class="questions">
+              <li>Apa yang sedang dirasakan Raka?</li>
+              <li>Apakah sikap Raka termasuk hasad? Jelaskan.</li>
+              <li>Bagaimana seharusnya Raka menyikapi keberhasilan temannya?</li>
+            </ol>
+          </div>
+
+          <div class="mini-question">“Apakah keinginan mendapatkan prestasi seperti orang lain selalu berarti hasad?”</div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="2">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 4 -->
+      <section class="page" data-page="3" data-label="Aktivitas 2">
+        <div class="section-card">
+          <div class="page-head">
+            <div class="eyebrow">🏆 Aktivitas 2</div>
+            <h2 style="margin-top:12px;">Ketika Kita Mendapat Kelebihan</h2>
+            <p class="sub">⏱️ Waktu: 20 menit</p>
+          </div>
+
+          <div class="case-card">
+            <p>Kamu mendapatkan juara 1 lomba cerdas cermat.</p>
+            <p>Banyak teman memuji dan mengatakan bahwa kamu pintar.</p>
+            <div class="case-quote">“Memang pantas aku menang.<br>Aku memang lebih pintar daripada mereka.”</div>
+            <p style="margin-top:12px;">Bahkan kamu mulai merasa tidak perlu belajar dari teman-temanmu lagi.</p>
+          </div>
+
+          <div class="callout write">
+            <h3>✍️ TULIS DI BUKU TULIS</h3>
+            <ol class="questions">
+              <li>Apakah sikap tersebut termasuk ujub, takabur, atau keduanya? Jelaskan.</li>
+              <li>Apa perbedaan ujub dan takabur berdasarkan kasus tersebut?</li>
+              <li>Bagaimana seharusnya kamu bersikap setelah mendapatkan prestasi?</li>
+              <li>Mengapa seseorang tetap harus rendah hati meskipun memiliki kelebihan?</li>
+            </ol>
+          </div>
+
+          <div class="callout remember">
+            <h3>💡 RENUNGKAN</h3>
+            <p>Memiliki kelebihan bukan masalah. Yang perlu dijaga adalah bagaimana hati kita ketika memiliki kelebihan tersebut.</p>
+          </div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="3">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 5 -->
+      <section class="page" data-page="4" data-label="Aktivitas 3">
+        <div class="section-card">
+          <div class="page-head">
+            <div class="eyebrow">🧠 Aktivitas 3</div>
+            <h2 style="margin-top:12px;">Bedakan Ketiganya</h2>
+            <p class="sub">⏱️ Waktu: 15 menit</p>
+          </div>
+
+          <p><strong>Buat tabel berikut di buku tulis.</strong></p>
+          <div class="table-wrap">
+            <table aria-label="Tabel perbandingan hasad, ujub, dan takabur">
+              <thead>
+                <tr><th>SIFAT</th><th>APA MAKSUDNYA?</th><th>CONTOH SEDERHANA</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Hasad</strong></td><td></td><td></td></tr>
+                <tr><td><strong>Ujub</strong></td><td></td><td></td></tr>
+                <tr><td><strong>Takabur</strong></td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout write">
+            <h3>✍️ TULIS DI BUKU</h3>
+            <p>Menurutmu, apa perbedaan paling mudah antara hasad, ujub, dan takabur?</p>
+          </div>
+
+          <div class="notice">⚠️ Gunakan bahasamu sendiri. <strong>Jangan sekadar menyalin definisi dari buku.</strong></div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="4">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 6 -->
+      <section class="page" data-page="5" data-label="Aktivitas 4">
+        <div class="section-card">
+          <div class="page-head">
+            <div class="eyebrow">📱 Aktivitas 4</div>
+            <h2 style="margin-top:12px;">Coba Hubungkan dengan Kehidupanmu</h2>
+            <p class="sub">⏱️ Waktu: 20 menit</p>
+          </div>
+
+          <div class="case-card">
+            <p style="font-weight:800;">Bayangkan kamu membuka media sosial.</p>
+            <p>Kamu melihat seseorang memiliki sesuatu yang kamu inginkan:</p>
+            <div class="social-grid">
+              <div class="social-item"><span>📱</span> HP baru</div>
+              <div class="social-item"><span>🏆</span> Prestasi</div>
+              <div class="social-item"><span>🚗</span> Kendaraan</div>
+              <div class="social-item"><span>✈️</span> Liburan</div>
+              <div class="social-item"><span>💰</span> Kehidupan yang terlihat menyenangkan</div>
+              <div class="social-item"><span>✨</span> Penampilan yang menarik</div>
+            </div>
+          </div>
+
+          <div class="callout write">
+            <h3>✍️ TULIS DI BUKU</h3>
+            <ol class="questions">
+              <li>Apa yang biasanya muncul dalam pikiranmu ketika melihat hal seperti itu?</li>
+              <li>Bagaimana agar perasaan tersebut tidak berubah menjadi hasad?</li>
+              <li>Jika suatu hari kamu memiliki sesuatu yang lebih baik daripada temanmu, bagaimana agar kamu tidak menjadi ujub atau takabur?</li>
+              <li>Tuliskan 3 sikap yang ingin kamu biasakan ketika melihat kelebihan orang lain.</li>
+            </ol>
+          </div>
+
+          <div class="callout reflect">
+            <h3>❤️ INGAT</h3>
+            <p>Melihat kelebihan orang lain adalah ujian bagi hati kita.</p>
+          </div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="5">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 7 -->
+      <section class="page" data-page="6" data-label="Aktivitas 5">
+        <div class="section-card calm">
+          <div class="page-head">
+            <div class="eyebrow">❤️ Aktivitas 5</div>
+            <h2 style="margin-top:12px;">Cermin Diri</h2>
+            <p class="sub">⏱️ Waktu: 15 menit</p>
+          </div>
+
+          <div class="big-reflection">🪞 Cermin Diri</div>
+          <p style="font-weight:800;">Tidak ada jawaban yang harus terlihat sempurna.</p>
+          <p style="color:var(--muted);">Jawablah dengan jujur karena bagian ini adalah percakapanmu dengan dirimu sendiri.</p>
+
+          <div class="callout write" style="margin-top:20px;">
+            <h3>✍️ TULIS DI BUKU</h3>
+            <ol class="questions">
+              <li>Kelebihan orang lain apa yang terkadang membuatmu merasa iri?</li>
+              <li>Kelebihan apa yang kamu miliki dan harus kamu syukuri?</li>
+              <li>Pernahkah kamu merasa lebih hebat daripada orang lain? Ceritakan secara singkat.</li>
+              <li>Setelah mempelajari hasad, ujub, dan takabur, apa satu sikap yang ingin kamu perbaiki?</li>
+            </ol>
+          </div>
+
+          <div class="section-card" style="margin:18px 0 0;box-shadow:none;background:#fff;">
+            <strong>Mulai hari ini, saya akan</strong>
+            <div style="margin:9px 0 8px;font-size:1.1rem;font-weight:800;">
+              <span class="blank-line"></span> karena <span class="blank-line"></span>
+            </div>
+            <small style="color:var(--muted);">Tuliskan kalimat lengkapnya di buku tulis.</small>
+          </div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="6">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 8 -->
+      <section class="page" data-page="7" data-label="Kesimpulan">
+        <div class="section-card conclusion-card">
+          <div class="eyebrow">📝 Kesimpulan</div>
+          <h2 style="margin-top:12px;">Sekarang, berhenti sejenak.</h2>
+          <p style="color:var(--muted);">Pikirkan apa yang sudah kamu pelajari.</p>
+
+          <div class="callout write" style="text-align:left;">
+            <h3>✍️ TULIS DI BUKU TULIS</h3>
+            <p>Buat kesimpulan 3–5 kalimat dengan tema:</p>
+            <div class="case-quote">“Bagaimana cara menjaga hati ketika melihat kelebihan orang lain dan ketika kita sendiri memiliki kelebihan?”</div>
+          </div>
+
+          <div class="motivational">“Jangan hanya belajar bagaimana menjadi orang yang hebat.<br>Belajarlah juga bagaimana tetap rendah hati ketika sudah menjadi hebat.”</div>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-primary" data-next data-complete-page="7">✅ SUDAH SELESAI</button></div>
+        </div>
+      </section>
+
+      <!-- PAGE 9 -->
+      <section class="page" data-page="8" data-label="Checklist">
+        <div class="section-card">
+          <div class="page-head">
+            <div class="eyebrow">🎉 Aktivitas selesai</div>
+            <h2 style="margin-top:12px;">Cek sebelum mengumpulkan.</h2>
+            <p class="sub">5 Aktivitas + 1 Kesimpulan</p>
+          </div>
+
+          <div style="font-weight:800;">Progress checklist: <span id="checkCount">0/10</span></div>
+          <div class="finish-progress" aria-label="Progress checklist"><div id="checkProgress"></div></div>
+
+          <div class="checklist" id="checklist">
+            <div class="check-item"><input type="checkbox" id="c1"><label for="c1"><strong>Aktivitas 1 sudah dikerjakan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c2"><label for="c2"><strong>Aktivitas 2 sudah dikerjakan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c3"><label for="c3"><strong>Aktivitas 3 sudah dikerjakan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c4"><label for="c4"><strong>Aktivitas 4 sudah dikerjakan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c5"><label for="c5"><strong>Aktivitas 5 sudah dikerjakan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c6"><label for="c6"><strong>Kesimpulan sudah dibuat</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c7"><label for="c7"><strong>Nama dan kelas sudah ditulis</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c8"><label for="c8"><strong>Semua halaman sudah difoto/scan</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c9"><label for="c9"><strong>Semua halaman sudah digabung menjadi 1 PDF</strong></label></div>
+            <div class="check-item"><input type="checkbox" id="c10"><label for="c10"><strong>File PDF siap diupload</strong></label></div>
+          </div>
+
+          <div class="success-message" id="allDoneMessage">✅ Semua checklist sudah lengkap. Tombol pengumpulan sekarang aktif.</div>
+          <button id="collectBtn" class="btn btn-primary btn-lg btn-full" data-go="9" disabled>📤 KUMPULKAN TUGAS</button>
+        </div>
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><span></span></div>
+        </div>
+      </section>
+
+      <!-- PAGE 10 -->
+      <section class="page" data-page="9" data-label="Pengumpulan">
+        <div class="section-card">
+          <div class="eyebrow">📤 Pengumpulan Tugas</div>
+          <h2 style="margin-top:12px;">Tinggal satu langkah lagi.</h2>
+          <p style="color:var(--muted);">Pastikan file yang dikumpulkan sudah rapi dan mudah dibaca.</p>
+
+          <div class="upload-box">
+            <ol class="questions">
+              <li>Foto/scan semua halaman buku tulis.</li>
+              <li>Pastikan tulisan terlihat jelas.</li>
+              <li>Pastikan tidak ada halaman yang terlewat.</li>
+              <li>Gabungkan menjadi <strong>SATU FILE PDF</strong>.</li>
+              <li>Beri nama file dengan format:</li>
+            </ol>
+            <div class="filename">KELAS_NAMA.pdf</div>
+            <div>Contoh: <strong>X5_Ahmad Saif.pdf</strong></div>
+          </div>
+
+          <div class="notice">⚠️ Sebelum menekan tombol, pastikan PDF yang dipilih sudah berisi seluruh halaman tugas dalam urutan yang benar.</div>
+          <div style="margin-top:18px;">
+            <a id="googleFormBtn" class="btn btn-primary btn-lg btn-full" href="#" target="_blank" rel="noopener">📤 UPLOAD TUGAS KE GOOGLE FORM</a>
+          </div>
+        </div>
+
+        <div class="section-card" style="text-align:center;">
+          <div style="font-size:2rem;">🌱 ❤️</div>
+          <h3 style="margin:8px 0 4px;">Perjalananmu selesai.</h3>
+          <p style="margin:0;color:var(--muted);">Semoga ilmu hari ini tidak hanya berhenti di buku, tetapi ikut menjaga hati dalam kehidupan sehari-hari.</p>
+        </div>
+
+        <div class="nav">
+          <div class="nav-left"><button class="btn btn-secondary" data-prev>← Kembali</button></div>
+          <div class="nav-right"><button class="btn btn-ghost" data-go="8">Lihat Checklist</button></div>
+        </div>
+      </section>
+
+      <!-- Timer -->
+      <div class="timer-card" id="timerCard" aria-live="polite">
+        <div class="timer-left">
+          <div class="timer-icon">⏱️</div>
+          <div>
+            <div class="timer-value" id="timerValue">90:00</div>
+            <div class="timer-status" id="timerStatus">Timer belum dimulai</div>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="timerBtn">MULAI TIMER</button>
+      </div>
+    </main>
+
+    <footer>
+      Website panduan aktivitas belajar · PAI dan Budi Pekerti · Kelas X SMA
+    </footer>
+  </div>
+
+  <script>
+    // Ganti nilai ini bila link Google Form berubah.
+    const GOOGLE_FORM_URL = 'https://forms.gle/dgRzck7HzEkC5B2HA';
+
+    const pages = [...document.querySelectorAll('.page')];
+    const progressBar = document.getElementById('progressBar');
+    const stageLabel = document.getElementById('stageLabel');
+    const mainContent = document.getElementById('mainContent');
+    const timerCard = document.getElementById('timerCard');
+    const timerValue = document.getElementById('timerValue');
+    const timerStatus = document.getElementById('timerStatus');
+    const timerBtn = document.getElementById('timerBtn');
+    const googleFormBtn = document.getElementById('googleFormBtn');
+    const collectBtn = document.getElementById('collectBtn');
+    const checkCount = document.getElementById('checkCount');
+    const checkProgress = document.getElementById('checkProgress');
+    const allDoneMessage = document.getElementById('allDoneMessage');
+
+    // Tahapan yang ditampilkan di progress bar: landing + petunjuk + 5 aktivitas + kesimpulan + checklist + upload.
+    let currentPage = 0;
+    const completedPages = new Set();
+
+    let timerSeconds = 90 * 60;
+    let timerStarted = false;
+    let timerInterval = null;
+
+    function showPage(index) {
+      const safeIndex = Math.max(0, Math.min(pages.length - 1, index));
+      currentPage = safeIndex;
+
+      pages.forEach((page, i) => page.classList.toggle('active', i === currentPage));
+
+      const percent = (currentPage / (pages.length - 1)) * 100;
+      progressBar.style.width = `${percent}%`;
+      stageLabel.textContent = pages[currentPage].dataset.label || `Tahap ${currentPage + 1}`;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateChecklistUI();
+    }
+
+    function nextPage() {
+      if (currentPage < pages.length - 1) {
+        showPage(currentPage + 1);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        showPage(currentPage - 1);
+      }
+    }
+
+    document.addEventListener('click', (event) => {
+      const nextBtn = event.target.closest('[data-next]');
+      const prevBtn = event.target.closest('[data-prev]');
+      const goBtn = event.target.closest('[data-go]');
+
+      if (nextBtn) {
+        const completePage = nextBtn.dataset.completePage;
+        if (completePage !== undefined) completedPages.add(Number(completePage));
+        nextPage();
+      }
+
+      if (prevBtn) prevPage();
+
+      if (goBtn && !goBtn.disabled) {
+        const target = Number(goBtn.dataset.go);
+        if (target === 9 && !areAllChecked()) return;
+        showPage(target);
+      }
+    });
+
+    function areAllChecked() {
+      return [...document.querySelectorAll('#checklist input[type="checkbox"]')].every(cb => cb.checked);
+    }
+
+    function updateChecklistUI() {
+      const boxes = [...document.querySelectorAll('#checklist input[type="checkbox"]')];
+      if (!boxes.length) return;
+
+      boxes.forEach(box => {
+        const wrapper = box.closest('.check-item');
+        if (wrapper) wrapper.classList.toggle('done', box.checked);
+      });
+
+      const done = boxes.filter(cb => cb.checked).length;
+      const total = boxes.length;
+      const percent = (done / total) * 100;
+
+      checkCount.textContent = `${done}/${total}`;
+      checkProgress.style.width = `${percent}%`;
+      const allDone = done === total;
+      collectBtn.disabled = !allDone;
+      allDoneMessage.classList.toggle('show', allDone);
+    }
+
+    document.querySelectorAll('#checklist input[type="checkbox"]').forEach(box => {
+      box.addEventListener('change', updateChecklistUI);
+    });
+
+    googleFormBtn.href = GOOGLE_FORM_URL;
+
+    function renderTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      const seconds = Math.max(0, totalSeconds % 60).toString().padStart(2, '0');
+      timerValue.textContent = `${minutes}:${seconds}`;
+    }
+
+    function updateTimerVisual() {
+      timerCard.classList.remove('warning', 'danger');
+      if (timerSeconds <= 10 * 60 && timerSeconds > 5 * 60) {
+        timerCard.classList.add('warning');
+        timerStatus.textContent = '🟡 Waktu mulai menipis';
+      } else if (timerSeconds <= 5 * 60 && timerSeconds > 0) {
+        timerCard.classList.add('danger');
+        timerStatus.textContent = '🔴 Waktu hampir habis';
+      } else if (timerSeconds > 10 * 60) {
+        timerStatus.textContent = '🟢 Waktu masih cukup';
+      }
+    }
+
+    function tickTimer() {
+      timerSeconds -= 1;
+      renderTime(timerSeconds);
+      updateTimerVisual();
+
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerSeconds = 0;
+        renderTime(0);
+        timerStatus.textContent = '⏰ Waktu 90 menit telah selesai.';
+        timerBtn.disabled = true;
+        timerBtn.textContent = 'WAKTU SELESAI';
+      }
+    }
+
+    timerBtn.addEventListener('click', () => {
+      if (timerStarted || timerSeconds <= 0) return;
+      timerStarted = true;
+      timerBtn.textContent = 'TIMER BERJALAN';
+      timerStatus.textContent = '🟢 Waktu masih cukup';
+      timerInterval = setInterval(tickTimer, 1000);
+    });
+
+    renderTime(timerSeconds);
+    updateTimerVisual();
+    updateChecklistUI();
+    showPage(0);
+
+    // Keyboard navigation: Left/Right arrows, bila fokus tidak sedang berada di kontrol input.
+    document.addEventListener('keydown', (event) => {
+      const tag = document.activeElement?.tagName;
+      const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(tag);
+      if (typing) return;
+      if (event.key === 'ArrowRight') nextPage();
+      if (event.key === 'ArrowLeft') prevPage();
+    });
+  </script>
+</body>
+</html>
