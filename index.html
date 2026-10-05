@@ -392,30 +392,6 @@
       margin: 6px 0 10px;
     }
 
-    .timer-card {
-      position: sticky;
-      bottom: 12px;
-      z-index: 10;
-      margin: 12px 0;
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: 0 12px 28px rgba(16,24,40,.12);
-      padding: 13px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .timer-left { display:flex; align-items:center; gap:10px; min-width:0; }
-    .timer-icon { font-size:1.35rem; }
-    .timer-value { font-variant-numeric: tabular-nums; font-weight: 900; font-size: 1.55rem; }
-    .timer-status { color:var(--muted); font-size:.78rem; font-weight:700; }
-    .timer-card.warning { border-color:#e0b33a; }
-    .timer-card.danger { border-color:#df8a84; }
-
     .nav {
       display:flex;
       align-items:center;
@@ -510,7 +486,6 @@
       .nav { flex-direction:column; align-items:stretch; }
       .nav-left, .nav-right { width:100%; }
       .nav .btn { flex:1; }
-      .timer-card { position: sticky; bottom: 8px; }
     }
   </style>
 </head>
@@ -876,18 +851,6 @@
           <div class="nav-right"><button class="btn btn-ghost" data-go="8">Lihat Checklist</button></div>
         </div>
       </section>
-
-      <!-- Timer -->
-      <div class="timer-card" id="timerCard" aria-live="polite">
-        <div class="timer-left">
-          <div class="timer-icon">⏱️</div>
-          <div>
-            <div class="timer-value" id="timerValue">90:00</div>
-            <div class="timer-status" id="timerStatus">Timer belum dimulai</div>
-          </div>
-        </div>
-        <button class="btn btn-primary" id="timerBtn">MULAI TIMER</button>
-      </div>
     </main>
 
     <footer>
@@ -903,10 +866,6 @@
     const progressBar = document.getElementById('progressBar');
     const stageLabel = document.getElementById('stageLabel');
     const mainContent = document.getElementById('mainContent');
-    const timerCard = document.getElementById('timerCard');
-    const timerValue = document.getElementById('timerValue');
-    const timerStatus = document.getElementById('timerStatus');
-    const timerBtn = document.getElementById('timerBtn');
     const googleFormBtn = document.getElementById('googleFormBtn');
     const collectBtn = document.getElementById('collectBtn');
     const checkCount = document.getElementById('checkCount');
@@ -916,10 +875,6 @@
     // Tahapan yang ditampilkan di progress bar: landing + petunjuk + 5 aktivitas + kesimpulan + checklist + upload.
     let currentPage = 0;
     const completedPages = new Set();
-
-    let timerSeconds = 90 * 60;
-    let timerStarted = false;
-    let timerInterval = null;
 
     function showPage(index) {
       const safeIndex = Math.max(0, Math.min(pages.length - 1, index));
@@ -997,51 +952,6 @@
 
     googleFormBtn.href = GOOGLE_FORM_URL;
 
-    function renderTime(totalSeconds) {
-      const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-      const seconds = Math.max(0, totalSeconds % 60).toString().padStart(2, '0');
-      timerValue.textContent = `${minutes}:${seconds}`;
-    }
-
-    function updateTimerVisual() {
-      timerCard.classList.remove('warning', 'danger');
-      if (timerSeconds <= 10 * 60 && timerSeconds > 5 * 60) {
-        timerCard.classList.add('warning');
-        timerStatus.textContent = '🟡 Waktu mulai menipis';
-      } else if (timerSeconds <= 5 * 60 && timerSeconds > 0) {
-        timerCard.classList.add('danger');
-        timerStatus.textContent = '🔴 Waktu hampir habis';
-      } else if (timerSeconds > 10 * 60) {
-        timerStatus.textContent = '🟢 Waktu masih cukup';
-      }
-    }
-
-    function tickTimer() {
-      timerSeconds -= 1;
-      renderTime(timerSeconds);
-      updateTimerVisual();
-
-      if (timerSeconds <= 0) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        timerSeconds = 0;
-        renderTime(0);
-        timerStatus.textContent = '⏰ Waktu 90 menit telah selesai.';
-        timerBtn.disabled = true;
-        timerBtn.textContent = 'WAKTU SELESAI';
-      }
-    }
-
-    timerBtn.addEventListener('click', () => {
-      if (timerStarted || timerSeconds <= 0) return;
-      timerStarted = true;
-      timerBtn.textContent = 'TIMER BERJALAN';
-      timerStatus.textContent = '🟢 Waktu masih cukup';
-      timerInterval = setInterval(tickTimer, 1000);
-    });
-
-    renderTime(timerSeconds);
-    updateTimerVisual();
     updateChecklistUI();
     showPage(0);
 
